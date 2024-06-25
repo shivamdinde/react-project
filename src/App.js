@@ -19,9 +19,12 @@ function App() {
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <div className="app">
+        <div className="app" style={{ display: "flex" }}>
           <Sidebar />
-          <main className="content">
+          <main
+            className="content"
+            style={{ marginLeft: "90px", width: "100%" }}
+          >
             <Topbar />
 
             <Routes>

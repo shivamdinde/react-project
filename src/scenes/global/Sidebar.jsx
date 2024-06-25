@@ -44,6 +44,13 @@ const Sidebar = () => {
   return (
     <Box
       sx={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        bottom: 0,
+        width: isCollapsed ? "80px" : "240px",
+        zIndex: 1000,
+
         "& .pro-sidebar-inner": {
           background: `${colors.primary[400]} !important`,
         },
