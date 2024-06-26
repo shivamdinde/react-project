@@ -30,15 +30,16 @@ const Form = () => {
         }) => (
           <form onSubmit={handleSubmit}>
             <Box
-              display="grid"
-              gap="30px"
-              gridTemplateColumns="repeat(4, minmax(0, 1fr))"
-              sx={{
-                "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
-              }}
+              display="flex"
+              flexDirection="column"
+              gap="20px"
+              // gridTemplateColumns="repeat(4, minmax(0, 1fr))"
+              // sx={{
+              //   "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
+              // }}
             >
               <TextField
-                fullWidth
+                sx={{ width: "500px" }}
                 variant="filled"
                 type="text"
                 label="First Name"
@@ -48,10 +49,10 @@ const Form = () => {
                 name="firstName"
                 error={!!touched.firstName && !!errors.firstName}
                 helperText={touched.firstName && errors.firstName}
-                sx={{ gridColumn: "span 2" }}
+                // sx={{ gridColumn: "span 2" }}
               />
               <TextField
-                fullWidth
+                sx={{ width: "500px" }}
                 variant="filled"
                 type="text"
                 label="Last Name"
@@ -61,10 +62,10 @@ const Form = () => {
                 name="lastName"
                 error={!!touched.lastName && !!errors.lastName}
                 helperText={touched.lastName && errors.lastName}
-                sx={{ gridColumn: "span 2" }}
+                // sx={{ gridColumn: "span 2" }}
               />
               <TextField
-                fullWidth
+                sx={{ width: "500px" }}
                 variant="filled"
                 type="text"
                 label="Email"
@@ -74,10 +75,10 @@ const Form = () => {
                 name="email"
                 error={!!touched.email && !!errors.email}
                 helperText={touched.email && errors.email}
-                sx={{ gridColumn: "span 4" }}
+                // sx={{ gridColumn: "span 4" }}
               />
               <TextField
-                fullWidth
+                sx={{ width: "500px" }}
                 variant="filled"
                 type="text"
                 label="Contact Number"
@@ -87,10 +88,10 @@ const Form = () => {
                 name="contact"
                 error={!!touched.contact && !!errors.contact}
                 helperText={touched.contact && errors.contact}
-                sx={{ gridColumn: "span 4" }}
+                // sx={{ gridColumn: "span 4" }}
               />
               <TextField
-                fullWidth
+                sx={{ width: "500px" }}
                 variant="filled"
                 type="text"
                 label="Address 1"
@@ -100,10 +101,10 @@ const Form = () => {
                 name="address1"
                 error={!!touched.address1 && !!errors.address1}
                 helperText={touched.address1 && errors.address1}
-                sx={{ gridColumn: "span 4" }}
+                // sx={{ gridColumn: "span 4" }}
               />
               <TextField
-                fullWidth
+                sx={{ width: "500px" }}
                 variant="filled"
                 type="text"
                 label="Address 2"
@@ -113,10 +114,10 @@ const Form = () => {
                 name="address2"
                 error={!!touched.address2 && !!errors.address2}
                 helperText={touched.address2 && errors.address2}
-                sx={{ gridColumn: "span 4" }}
+                // sx={{ gridColumn: "span 4" }}
               />
             </Box>
-            <Box display="flex" justifyContent="end" mt="20px">
+            <Box display="flex" justifyContent="start" mt="30px">
               <Button type="submit" color="secondary" variant="contained">
                 Create New User
               </Button>

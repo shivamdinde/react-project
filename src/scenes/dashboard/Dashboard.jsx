@@ -205,9 +205,11 @@ const Dashboard = () => {
               </Box>
               <Box color={colors.grey[100]}>{transaction.date}</Box>
               <Box
-                backgroundColor={colors.greenAccent[500]}
+                border={`1px solid ${colors.grey[100]}`}
+                color={colors.grey[100]}
+                // backgroundColor={colors.greenAccent[800]}
                 p="5px 10px"
-                borderRadius="4px"
+                borderRadius="5px"
               >
                 ${transaction.cost}
               </Box>
