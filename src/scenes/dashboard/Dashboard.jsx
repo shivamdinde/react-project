@@ -169,6 +169,7 @@ const Dashboard = () => {
           gridRow="span 4"
           backgroundColor={colors.primary[400]}
           overflow="auto"
+          mb="20px"
         >
           <Box
             display="flex"
@@ -223,6 +224,7 @@ const Dashboard = () => {
           gridRow="span 2"
           backgroundColor={colors.primary[400]}
           p="30px"
+          mb="20px"
         >
           <Typography variant="h5" fontWeight="600">
             Campaign
@@ -248,6 +250,7 @@ const Dashboard = () => {
           gridColumn="span 4"
           gridRow="span 2"
           backgroundColor={colors.primary[400]}
+          mb="20px"
         >
           <Typography
             variant="h5"
