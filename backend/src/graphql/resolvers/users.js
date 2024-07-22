@@ -6,8 +6,21 @@ const SECRET_KEY = "hello"; // Ensure SECRET_KEY is defined in your environment
 
 module.exports = {
   Mutation: {
-    async registerUser(_,
-      { registerInput: {name, email, phone, salary, department } }
+    async registerUser(
+      _,
+      {
+        registerInput: {
+          name,
+          email,
+          phone,
+          salary,
+          department,
+          dob,
+          address,
+          city,
+          pinCode,
+        },
+      }
     ) {
       try {
         const existingUser = await User.findOne({ email });
@@ -22,36 +35,37 @@ module.exports = {
         const newUser = new User({
           id: newId,
           name,
-          phone,
           email: email.toLowerCase(),
+          phone,
+          dob,
+          address,
+          city,
+          pinCode,
           salary,
           department,
           role: "EMP",
           isActive: true,
+          hasPermissions: [],
         });
         const res = await newUser.save();
-        const idsave= newUser.id;
+        const idsave = newUser.id;
 
         return {
           idsave,
           // ...res._doc,
-          ...res._doc
+          ...res._doc,
         };
       } catch (error) {
         throw new GraphQLError(`Failed to register user: ${error.message}`);
       }
     },
 
-
-
     async updateUserDetails(_, { updatedDetails }) {
-      const { firstName, lastName, email, phone, salary, department, role } = updatedDetails;
+      const { email, ...updateFields } = updatedDetails;
       try {
-        const user = await User.findOneAndUpdate(
-          { email },
-          { firstName, lastName, phone, salary, department, role },
-          { new: true }
-        );
+        const user = await User.findOneAndUpdate({ email }, updateFields, {
+          new: true,
+        });
 
         if (!user) {
           throw new GraphQLError("User not found");
@@ -69,9 +83,7 @@ module.exports = {
         const existingUser = await User.findOne({ email });
 
         if (!existingUser) {
-          throw new GraphQLError(
-            "User not found with this email: " + email
-          );
+          throw new GraphQLError("User not found with this email: " + email);
         }
 
         // const res = await User.deleteOne({ email });
@@ -81,19 +93,14 @@ module.exports = {
           { new: true }
         );
 
-        return (
-          "User deleted successfully!"
-        )
-
-
+        return "User deleted successfully!";
       } catch (err) {
-        throw new GraphQLError(`Failed to delete user: ${err.message}`)
+        throw new GraphQLError(`Failed to delete user: ${err.message}`);
       }
-    }
+    },
   },
 
   Query: {
-
     async getUserProfile(_, { email }) {
       try {
         const user = await User.findOne({ email });
@@ -102,13 +109,15 @@ module.exports = {
         }
         return user;
       } catch (error) {
-        throw new GraphQLError(`Failed to fetch user profile: ${error.message}`);
+        throw new GraphQLError(
+          `Failed to fetch user profile: ${error.message}`
+        );
       }
     },
 
     async getAllUsers() {
       try {
-        const roles = await User.find({"isActive": true});
+        const roles = await User.find({ isActive: true });
         return roles;
       } catch (error) {
         throw new GraphQLError(`Failed to fetch all users: ${error.message}`);

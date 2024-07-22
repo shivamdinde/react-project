@@ -96,7 +96,7 @@ const Sidebar = () => {
             )}
           </MenuItem>
 
-          {!isCollapsed && (
+          {/* {!isCollapsed && (
             <Box mb="25px">
               <Box display="flex" justifyContent="center" alignItems="center">
                 <img
@@ -121,7 +121,7 @@ const Sidebar = () => {
                 </Typography>
               </Box>
             </Box>
-          )}
+          )} */}
 
           <Box paddingLeft={isCollapsed ? undefined : "10%"}>
             <Item
