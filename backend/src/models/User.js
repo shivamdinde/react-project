@@ -12,7 +12,7 @@ const userSchema = new Schema({
   pinCode: { type: String },
   salary: { type: Number},
   department: { type: String},
-  hasPermissions: { type: [String] },
+//   hasPermissions: { type: [String] },
   isActive: {type: Boolean, default: "True"},
 });
 
