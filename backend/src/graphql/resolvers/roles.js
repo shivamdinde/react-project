@@ -1,0 +1,211 @@
+const { Role, Type, Page, Permission, RoleHasPermissions, } = require("../../models/User");
+
+const { GraphQLError } = require("graphql");
+
+module.exports = {
+    Mutation: {
+        async createRole(_, { name }) {
+
+            try {
+                const existingName = await Role.findOne({ name })
+
+                if (existingName) {
+                    throw new GraphQLError("Role already exists. You can update its permissions.")
+                }
+
+                const newRole = new Role({
+                    name: name
+                })
+                // const newHasPermissions = new RoleHasPermissions({
+                //     role: name,
+                //     permissions: ["NO_ACCESS"]
+                // })
+
+                const res = await newRole.save();
+                // const res2 = await newHasPermissions.save();
+                return {
+                    role: res.role,
+                    // permissions: res2.permissions,
+                }
+
+            } catch (err) {
+                throw new GraphQLError(`Failed to create role: ${err.message}`)
+            }
+        },
+
+        async deleteRole(_, { name }) {
+            try {
+                const existingName = await Role.findOne({ name })
+
+                if (!existingName) {
+                    throw new GraphQLError("Role does not exists.")
+                }
+
+                const res = await Role.deleteOne({ name });
+                // const res2 = await RoleHasPermissions.deleteOne({ role: name });
+                return "Role deleted successfully!"
+            } catch (err) {
+                throw new GraphQLError(`Failed to delete role: ${err.message}`)
+            }
+        },
+
+        async createType(_, { name }) {
+
+            try {
+                const existingName = await Type.findOne({ name })
+
+                if (existingName) {
+                    throw new GraphQLError("Role already exists. You can update its permissions.")
+                }
+
+                const newType = new Type({
+                    name: name
+                })
+                // const newHasPermissions = new RoleHasPermissions({
+                //     role: name,
+                //     permissions: ["NO_ACCESS"]
+                // })
+
+                const res = await newType.save();
+                // const res2 = await newHasPermissions.save();
+                return {
+                    type: res.role,
+                }
+
+            } catch (err) {
+                throw new GraphQLError(`Failed to create role: ${err.message}`)
+            }
+        },
+
+        async deleteType(_, { name }) {
+            try {
+                const existingName = await Type.findOne({ name })
+
+                if (!existingName) {
+                    throw new GraphQLError("Role does not exists.")
+                }
+
+                const res = await Type.deleteOne({ name });
+                // const res2 = await hasPermissions.deleteOne({ role: name });
+                return "Role deleted successfully!"
+            } catch (err) {
+                throw new GraphQLError(`Failed to delete role: ${err.message}`)
+            }
+        },
+
+        async addPage(_, { name }) {
+            try {
+
+            }catch(err){
+                throw new GraphQLError(err.message)
+            }
+        }
+
+        async updatePermissions(_, { updatePermissions }) {
+            try {
+                const { role, permissions } = updatePermissions;
+
+                const existingRole = await Role.findOne({ role })
+                if (existingRole) {
+                    throw new GraphQLError("Role does not exist!")
+                }
+
+                const res = await hasPermissions.findOneAndUpdate(
+                    { role },
+                    { permissions },
+                );
+
+                return "Roles and its permissions updated successfully!"
+            } catch (err) {
+                throw new GraphQLError(`Failed to update Permission: ${err.message}`)
+            }
+        },
+
+        async createPermission(_, { permission }) {
+            try {
+                const existingPer = await Permission.findOne({ permission })
+
+                if (existingPer) {
+                    throw new GraphQLError("Permission already exists.")
+                }
+
+                const newPerm = new Permission({
+                    permission: permission
+                })
+
+                const res = await newPerm.save();
+
+                return "Success"
+            }catch(error){
+                throw new GraphQLError(`Failed to create new permission: ${error.message}`)
+            }
+        },
+
+        async deletePermission(_, { permission }) {
+            try {
+                const existingPer = await Permission.findOne({ permission })
+
+                if (!existingPer) {
+                    throw new GraphQLError("Permission does not exists.")
+                }
+
+                // const newPerm = new Permission({
+                //     permission: permission
+                // })
+
+                const res = await Permission.deleteOne({ permission });
+
+                return "Success"
+            }catch(error){
+                throw new GraphQLError(`Failed to create new permission: ${error.message}`)
+            }
+        }
+
+    },
+
+    Query: {
+
+        async getAllRoles() {
+            try {
+                const roles = await hasPermissions.find();
+                return roles;
+            } catch (error) {
+                throw new GraphQLError(`Failed to fetch all users: ${error.message}`);
+            }
+        },
+        
+        async getAvailablePermissions () {
+            try{
+                const availPermissions = await Permission.find();
+
+                const count = await Permission.countDocuments(); // Get the total number of users
+                let permissions = [];
+                for(let i=0; i<count; i++){
+                    // console.log(availPermissions[0].permission)
+                    permissions.push(availPermissions[i].permission)
+                }
+
+                return permissions;
+            }catch(err){
+                throw new GraphQLError(`Failed to fetch the permissions: ${err.message}`)
+            }
+        },
+
+        async getPermissions(_, { role }) {
+            try {
+                const existingRole = await Role.find({ role })
+                if (!existingRole) {
+                    throw new GraphQLError(`Role does not exists!`)
+                }
+
+                const res = await hasPermissions.findOne({ role })
+                return (
+                    res
+                )
+            } catch (err) {
+                throw new GraphQLError(`Failed to fetch permissions: ${err.message}`)
+            }
+        }
+
+    }
+}
