@@ -35,15 +35,17 @@ const permissions = new Schema({
     permission: { type: String, unique: true },
 })
 
-const hasPermissions = new Schema({
+const roleHasPermissions = new Schema({
     role: { type: String, unique: true },
     permissions: { type: [String], default: ["NO_ACCESS"] }
 })
 
-module.exports.User = model("Emp", userSchema);
+module.exports.User = model("User", userSchema);
 
 module.exports.Role = model("Role", roles);
 module.exports.Type = model("Type", types);
+
 module.exports.Page = model("Page", pages);
 module.exports.Permission = model("Permission", permissions);
-module.exports.hasPermissions = model("HasPermission", hasPermissions);
+
+module.exports.RoleHasPermissions = model("HasPermission", roleHasPermissions);

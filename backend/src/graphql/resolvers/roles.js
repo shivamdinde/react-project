@@ -1,4 +1,4 @@
-const { Role, Permission, hasPermissions } = require("../../models/User");
+const { Role, Type, Page, Permission, RoleHasPermissions, } = require("../../models/User");
 
 const { GraphQLError } = require("graphql");
 
@@ -16,16 +16,16 @@ module.exports = {
                 const newRole = new Role({
                     name: name
                 })
-                const newHasPermissions = new hasPermissions({
-                    role: name,
-                    permissions: ["NO_ACCESS"]
-                })
+                // const newHasPermissions = new RoleHasPermissions({
+                //     role: name,
+                //     permissions: ["NO_ACCESS"]
+                // })
 
                 const res = await newRole.save();
-                const res2 = await newHasPermissions.save();
+                // const res2 = await newHasPermissions.save();
                 return {
-                    role: res2.role,
-                    permissions: res2.permissions,
+                    role: res.role,
+                    // permissions: res2.permissions,
                 }
 
             } catch (err) {
@@ -42,12 +42,64 @@ module.exports = {
                 }
 
                 const res = await Role.deleteOne({ name });
-                const res2 = await hasPermissions.deleteOne({ role: name });
+                // const res2 = await RoleHasPermissions.deleteOne({ role: name });
                 return "Role deleted successfully!"
             } catch (err) {
                 throw new GraphQLError(`Failed to delete role: ${err.message}`)
             }
         },
+
+        async createType(_, { name }) {
+
+            try {
+                const existingName = await Type.findOne({ name })
+
+                if (existingName) {
+                    throw new GraphQLError("Role already exists. You can update its permissions.")
+                }
+
+                const newType = new Type({
+                    name: name
+                })
+                // const newHasPermissions = new RoleHasPermissions({
+                //     role: name,
+                //     permissions: ["NO_ACCESS"]
+                // })
+
+                const res = await newType.save();
+                // const res2 = await newHasPermissions.save();
+                return {
+                    type: res.role,
+                }
+
+            } catch (err) {
+                throw new GraphQLError(`Failed to create role: ${err.message}`)
+            }
+        },
+
+        async deleteType(_, { name }) {
+            try {
+                const existingName = await Type.findOne({ name })
+
+                if (!existingName) {
+                    throw new GraphQLError("Role does not exists.")
+                }
+
+                const res = await Type.deleteOne({ name });
+                // const res2 = await hasPermissions.deleteOne({ role: name });
+                return "Role deleted successfully!"
+            } catch (err) {
+                throw new GraphQLError(`Failed to delete role: ${err.message}`)
+            }
+        },
+
+        async addPage(_, { name }) {
+            try {
+
+            }catch(err){
+                throw new GraphQLError(err.message)
+            }
+        }
 
         async updatePermissions(_, { updatePermissions }) {
             try {

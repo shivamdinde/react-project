@@ -7,7 +7,7 @@ const SECRET_KEY = "hello"; // Ensure SECRET_KEY is defined in your environment
 module.exports = {
   Mutation: {
     async registerUser(_,
-      { registerInput: {firstName, lastName, email, phone, salary, department } }
+      { registerInput: {name, email, phone, salary, department } }
     ) {
       try {
         const existingUser = await User.findOne({ email });
@@ -21,8 +21,7 @@ module.exports = {
         const newId = (1000 + userCount).toString();
         const newUser = new User({
           id: newId,
-          firstName,
-          lastName,
+          name,
           phone,
           email: email.toLowerCase(),
           salary,
