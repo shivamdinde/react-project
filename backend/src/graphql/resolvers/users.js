@@ -45,7 +45,7 @@ module.exports = {
           department,
           role: "EMP",
           isActive: true,
-          hasPermissions: [],
+          // hasPermissions: [],
         });
         const res = await newUser.save();
         const idsave = newUser.id;
