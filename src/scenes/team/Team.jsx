@@ -38,6 +38,7 @@ const Team = () => {
       field: "accessLevel",
       headerName: "Access Level",
       flex: 1,
+      cellClassName: "access-column--cell",
       headerAlign: "center",
       align: "center",
       renderCell: ({ row: { role } }) => {
@@ -48,6 +49,7 @@ const Team = () => {
             p="5px"
             display="flex"
             justifyContent="center"
+            // marginTop="10px"
             backgroundColor={
               role === "admin"
                 ? colors.greenAccent[600]
@@ -97,6 +99,9 @@ const Team = () => {
           },
           "& .name-column--cell": {
             color: colors.greenAccent[300],
+          },
+          "& .access-column--cell": {
+            alignContent: "center"
           },
           "& .MuiDataGrid-columnHeader": {
             backgroundColor: colors.blueAccent[700],

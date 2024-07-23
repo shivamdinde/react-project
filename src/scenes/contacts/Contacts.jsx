@@ -6,12 +6,20 @@ import Header from "../../components/Header";
 import { useTheme } from "@mui/material";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_USERS } from "../../graphql/queries";
+import { useEffect, useState } from "react";
 
 const Contacts = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const { loading, error, data } = useQuery(GET_ALL_USERS);
 
+  const [userData, setUserData] = useState();
+  const [formData, setFormData] = useState();
+
+  const ALL_USERS = useQuery(GET_ALL_USERS);
+
+  const handleChange = () => {
+    console.log("Hello")
+  }
   const columns = [
     {
       field: "id",
@@ -27,7 +35,9 @@ const Contacts = () => {
       cellClassName: "name-column--cell",
       headerAlign: "center",
       align: "center",
-    },
+      editable: true,
+    }
+    ,
     {
       field: "email",
       headerName: "Email",
@@ -42,6 +52,8 @@ const Contacts = () => {
       flex: 1,
       headerAlign: "center",
       align: "center",
+      editable: true,
+
     },
     {
       field: "dob",
@@ -55,6 +67,7 @@ const Contacts = () => {
       flex: 1,
       headerAlign: "center",
       align: "center",
+      editable: true,
     },
     {
       field: "city",
@@ -62,6 +75,7 @@ const Contacts = () => {
       flex: 1,
       headerAlign: "center",
       align: "center",
+      editable: true,
     },
     {
       field: "pincode",
@@ -69,6 +83,7 @@ const Contacts = () => {
       flex: 1,
       headerAlign: "center",
       align: "center",
+      editable: true,
     },
     {
       field: "department",
@@ -79,8 +94,17 @@ const Contacts = () => {
     },
   ];
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+  useEffect(() => {
+    if (ALL_USERS.data && ALL_USERS.data?.getAllUsers) {
+      // console.log(ALL_USERS.data?.getAllUsers)
+      setUserData(ALL_USERS.data?.getAllUsers)
+    }
+
+  }, [ALL_USERS.data])
+
+  if (ALL_USERS.loading) return <p>Loading...</p>;
+  if (ALL_USERS.error) return <p>Error: {ALL_USERS.error.message}</p>;
+
   return (
     <Box m="20px">
       <Header
@@ -120,9 +144,15 @@ const Contacts = () => {
         }}
       >
         <DataGrid
-          rows={data?.getAllUsers || []}
+          rows={userData || []}
           columns={columns}
           slots={{ toolbar: GridToolbar }}
+          // processRowUpdate={handleChange}
+          // onProcessRowUpdateError={(error) => {
+          //   // throw new Error(`Updating failure: ${error}`)
+          //   console.log(error)  
+          // }}
+          experimentalFeatures={{ newEditingApi: true }}
         />
       </Box>
     </Box>
