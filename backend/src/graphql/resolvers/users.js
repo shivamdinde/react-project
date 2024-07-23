@@ -18,7 +18,7 @@ module.exports = {
           dob,
           address,
           city,
-          pinCode,
+          pincode,
         },
       }
     ) {
@@ -40,7 +40,7 @@ module.exports = {
           dob,
           address,
           city,
-          pinCode,
+          pincode,
           salary,
           department,
           role: "EMP",

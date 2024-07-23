@@ -5,7 +5,8 @@ const mongoose = require("mongoose");
 const typeDefs = require("./graphql/typeDefs");
 const resolvers = require("./graphql/resolvers");
 
-MONGODB_URI = 'mongodb+srv://purusotammishrasm:Cluster0@cluster0.dmfuytd.mongodb.net/RBAC_v2?retryWrites=true&w=majority&appName=Cluster0'
+MONGODB_URI =
+  "mongodb+srv://purusotammishrasm:Cluster0@cluster0.dmfuytd.mongodb.net/RBAC_v2?retryWrites=true&w=majority&appName=Cluster0";
 
 const server = new ApolloServer({
   typeDefs,
@@ -18,8 +19,8 @@ async function startServer() {
     console.log("MongoDB Connected");
 
     const { url } = await startStandaloneServer(server, {
-        listen: { port: 4000 },
-    })
+      listen: { port: 4000 },
+    });
 
     console.log(`Server running at ${url}`);
   } catch (err) {
