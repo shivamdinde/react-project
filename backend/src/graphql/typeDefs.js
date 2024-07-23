@@ -1,91 +1,98 @@
 const { gql } = require("graphql-tag");
 
 module.exports = gql`
-type User {
-id: String!
-name: String!
-email: String!
-phone: String!
-dob: String
-role:String
-address: String
-city: String
-pincode:String
-salary: Int!
-department: String!
-role: String!
-isActive: Boolean!
+
+  type User {
+  id: String!
+  name: String!
+  email: String!
+  phone: String!
+  dob: String
+  role:String
+  address: String
+  city: String
+  pincode:String
+  salary: Int!
+  department: String!
+  isActive: Boolean!
 }
-type type{
-name:String!
+
+type Type{
+  name:String!
 }
-type roles{
-name: String!
+type Roles{
+  name: String!
 }
-type pages{
-key: Int!
-name: String!
-url: String
+type Pages{
+  key: Int!
+  name: String!
+  url: String
 }
-type permissions{
-key: Int!
-permission: String
+type Permissions{
+  key: Int!
+  permission: String
 }
 
 type RolePermissions {
-role: String!
-permissions: [String!]!
+  role: String!
+  permissions: [String!]!
 }
 
 input RoleHasPermissions {
-role: String!
-permissions: [String]!
+  role: String!
+  permissions: [String]!
 }
 
 input RegisterInput {
-name: String!
-email: String!
-phone: String!
-dob: String
-role:String
-address: String
-city: String
-pincode:String
-salary: Int!
-department: String!
+  name: String!
+  email: String!
+  phone: String!
+  dob: String
+  role:String
+  address: String
+  city: String
+  pincode:String
+  salary: Int!
+  department: String!
 }
 
 input UpdateUserDetailsInput {
-name: String!
-email: String!
-phone: String!
-dob: String
-role:String
-address: String
-city: String
-pincode:String
-salary: Int!
-department: String!
-role: String
+  name: String!
+  email: String!
+  phone: String!
+  dob: String
+  role:String
+  address: String
+  city: String
+  pincode:String
+  salary: Int!
+  department: String!
 }
 
 type Query {
-getUserProfile (email: String!): User
-getAllUsers: [User!]!
-getAllRoles: [RolePermissions!]!
-getPermissions (role: String!) : RolePermissions!
-getAvailablePermissions: [String]!
+  getUserProfile (email: String!): User
+  getAllUsers: [User!]!
+
+  getAllRoles: [String]!
+  getPermissions (role: String!) : RolePermissions!
+  getAvailablePermissions: [String]!
 }
 
 type Mutation {
-registerUser(registerInput: RegisterInput!): User!
-updateUserDetails(updatedDetails: UpdateUserDetailsInput!): User!
-deleteUser(email: String!, isActive: Boolean!): String!
+  createRole (name: String!) : Roles
+  deleteRole (name: String!) : String!
+  createType (name: String!) : Type!
+  deleteType (name: String!) : String!
+  addPage (name: String!, url: String) : Pages
+  deletePage (name: String!) : String!
+  updatePagePermission (key: Int!, permissions: [String]) : String
 
-createPermission(permission: String!): String!
-deletePermission(permission: String!): String!
-createRole (name: String!) : RolePermissions!
-deleteRole (name: String!) : String!
-updatePermissions (updatePermissions: hasPermissions!) : String!
 } 
 `;
+  // registerUser(registerInput: RegisterInput!): User!
+  // updateUserDetails(updatedDetails: UpdateUserDetailsInput!): User!
+  // deleteUser(email: String!, isActive: Boolean!): String!
+
+// createPermission(permission: String!): String!
+// deletePermission(permission: String!): String!
+// updatePermissions (updatePermissions: hasPermissions!) : String!

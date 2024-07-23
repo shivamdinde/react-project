@@ -32,7 +32,7 @@ const pages = new Schema({
 
 const permissions = new Schema({
     key: { type: Number },
-    permission: { type: String, unique: true },
+    permission: { type: [String], unique: true },
 })
 
 const roleHasPermissions = new Schema({
