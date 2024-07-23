@@ -27,9 +27,9 @@ module.exports = gql`
     name: String!
     url: String
   }
-  type Permissions {
-    key: Int!
-    permission: String
+  type PageAvailablePermissions {
+    key: Int
+    permission: [String]
   }
 
   type RolePermissions {
@@ -74,23 +74,26 @@ module.exports = gql`
 
     getAllRoles: [String]!
     getPermissions(role: String!): RolePermissions!
-    getAvailablePermissions: [String]!
+    getAvailablePermissions: [PageAvailablePermissions]
   }
 
   type Mutation {
     registerUser(registerInput: RegisterInput!): User!
     updateUserDetails(updatedDetails: UpdateUserDetailsInput!): User!
     deleteUser(email: String!, isActive: Boolean!): String!
+
     createRole(name: String!): Roles
     deleteRole(name: String!): String!
-    createType(name: String!): Type!
-    deleteType(name: String!): String!
     addPage(name: String!, url: String): Pages
-    deletePage(name: String!): String!
-    updatePagePermission(key: Int!, permissions: [String]): String
+    deletePage(key: Int!): String!
+    updatePagePermission(
+      key: Int!
+      permission: [String]
+    ): PageAvailablePermissions
+    updateRoleHasPermissions(
+      inputPermissions: RoleHasPermissions
+    ): RolePermissions!
   }
 `;
-
-// createPermission(permission: String!): String!
-// deletePermission(permission: String!): String!
-// updatePermissions (updatePermissions: hasPermissions!) : String!
+// createType (name: String!) : Type!
+// deleteType (name: String!) : String!
