@@ -12,37 +12,45 @@ import FAQ from "./scenes/faq/FAQ";
 import Bar from "./scenes/bar/Bar";
 import Pie from "./scenes/pie/Pie";
 import Line from "./scenes/line/Line";
+import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
+
+const client = new ApolloClient({
+  uri: "http://localhost:4000/",
+  cache: new InMemoryCache(),
+});
 
 function App() {
   const [theme, colorMode] = useMode();
   return (
-    <ColorModeContext.Provider value={colorMode}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <div className="app" style={{ display: "flex" }}>
-          <Sidebar />
-          <main
-            className="content"
-            style={{ marginLeft: "90px", width: "100%" }}
-          >
-            <Topbar />
+    <ApolloProvider client={client}>
+      <ColorModeContext.Provider value={colorMode}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <div className="app" style={{ display: "flex" }}>
+            <Sidebar />
+            <main
+              className="content"
+              style={{ marginLeft: "90px", width: "100%" }}
+            >
+              <Topbar />
 
-            <Routes>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/team" element={<Team />} />
-              <Route path="/contacts" element={<Contacts />} />
-              <Route path="/invoices" element={<Invoices />} />
-              <Route path="/form" element={<Form />} />
-              <Route path="/faq" element={<FAQ />} />
-              <Route path="/bar" element={<Bar />} />
-              <Route path="/pie" element={<Pie />} />
-              <Route path="/line" element={<Line />} />
-            </Routes>
-          </main>
-        </div>
-        ;
-      </ThemeProvider>
-    </ColorModeContext.Provider>
+              <Routes>
+                <Route path="/" element={<Dashboard />} />
+                <Route path="/team" element={<Team />} />
+                <Route path="/contacts" element={<Contacts />} />
+                <Route path="/invoices" element={<Invoices />} />
+                <Route path="/form" element={<Form />} />
+                <Route path="/faq" element={<FAQ />} />
+                <Route path="/bar" element={<Bar />} />
+                <Route path="/pie" element={<Pie />} />
+                <Route path="/line" element={<Line />} />
+              </Routes>
+            </main>
+          </div>
+          ;
+        </ThemeProvider>
+      </ColorModeContext.Provider>
+    </ApolloProvider>
   );
 }
 

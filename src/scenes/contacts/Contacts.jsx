@@ -4,54 +4,83 @@ import { tokens } from "../../theme";
 import { mockDataContacts } from "../../data/mockData";
 import Header from "../../components/Header";
 import { useTheme } from "@mui/material";
+import { useQuery } from "@apollo/client";
+import { GET_ALL_USERS } from "../../graphql/queries";
 
 const Contacts = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const { loading, error, data } = useQuery(GET_ALL_USERS);
 
   const columns = [
-    { field: "id", headerName: "ID", flex: 0.5 },
-    { field: "registrarId", headerName: "Registrar ID" },
+    {
+      field: "id",
+      headerName: "ID",
+      flex: 0.5,
+      headerAlign: "center",
+      align: "center",
+    },
     {
       field: "name",
       headerName: "Name",
       flex: 1,
       cellClassName: "name-column--cell",
-    },
-    {
-      field: "age",
-      headerName: "Age",
-      type: "number",
-      headerAlign: "left",
-      align: "left",
-    },
-    {
-      field: "phone",
-      headerName: "Phone Number",
-      flex: 1,
+      headerAlign: "center",
+      align: "center",
     },
     {
       field: "email",
       headerName: "Email",
       flex: 1,
+      cellClassName: "name-column--cell",
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "phone",
+      headerName: "Phone Number",
+      flex: 1,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "dob",
+      headerName: "Date of Birth",
+      headerAlign: "center",
+      align: "center",
     },
     {
       field: "address",
       headerName: "Address",
       flex: 1,
+      headerAlign: "center",
+      align: "center",
     },
     {
       field: "city",
       headerName: "City",
       flex: 1,
+      headerAlign: "center",
+      align: "center",
     },
     {
-      field: "zipCode",
-      headerName: "Zip Code",
+      field: "pincode",
+      headerName: "Pincode",
       flex: 1,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "department",
+      headerName: "Department",
+      flex: 1,
+      headerAlign: "center",
+      align: "center",
     },
   ];
 
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
   return (
     <Box m="20px">
       <Header
@@ -91,7 +120,7 @@ const Contacts = () => {
         }}
       >
         <DataGrid
-          rows={mockDataContacts}
+          rows={data?.getAllUsers || []}
           columns={columns}
           slots={{ toolbar: GridToolbar }}
         />
