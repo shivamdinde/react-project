@@ -134,25 +134,24 @@ module.exports = {
         }
 
         const pagesCount = await Page.countDocuments(); // Get the total number of users
-        const newKey = (101 + pagesCount).toString();
+        const newKey = 101 + pagesCount;
 
         const newPage = new Page({
           key: newKey,
           name: name,
           url: url,
         });
+        const res = await newPage.save();
 
         const newPermission = new Permission({
           key: newKey,
-          permissions: [""],
+          permission: ["READ"],
         });
-
-        const res = await newPage.save();
+        
         const res2 = await newPermission.save();
 
         return {
           ...res._doc,
-          ...res2._doc,
         };
       } catch (err) {
         throw new GraphQLError(`Failed to add the Page: ${err.message}`);

@@ -32,6 +32,7 @@ const Invoices = () => {
     {
       field: "salary",
       headerName: "Salary",
+      cellClassName: "salary-column--cell",
       flex: 1,
       renderCell: (params) => (
         <Typography color={colors.greenAccent[500]}>
@@ -74,6 +75,10 @@ const Invoices = () => {
           },
           "& .name-column--cell": {
             color: colors.greenAccent[300],
+          },
+          "& .salary-column--cell": {
+            color: colors.greenAccent[300],
+            alignContent: "center"
           },
           "& .MuiDataGrid-columnHeader": {
             backgroundColor: colors.blueAccent[700],
