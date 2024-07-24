@@ -1,25 +1,76 @@
-import { Box, Toolbar } from "@mui/material";
+import { Box, Snackbar, Alert } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
-import { mockDataContacts } from "../../data/mockData";
 import Header from "../../components/Header";
 import { useTheme } from "@mui/material";
 import { useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { GET_ALL_USERS } from "../../graphql/queries";
 import { useEffect, useState } from "react";
+import { UPDATE_USER_DETAILS } from "../../graphql/mutations";
 
 const Contacts = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
-  const [userData, setUserData] = useState();
-  const [formData, setFormData] = useState();
+  const [userData, setUserData] = useState([]);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "",
+  });
+  // const [formData, setFormData] = useState();
 
-  const ALL_USERS = useQuery(GET_ALL_USERS);
+  //const ALL_USERS = useQuery(GET_ALL_USERS);
 
-  const handleChange = () => {
-    console.log("Hello")
-  }
+  // const handleChange = () => {
+  //   console.log("Hello");
+  // };
+
+  // const [rows, setRows] = useState(userData);
+  const { data, loading, error } = useQuery(GET_ALL_USERS);
+  const [updateUserDetails] = useMutation(UPDATE_USER_DETAILS);
+  const handleCloseSnackbar = () => {
+    setSnackbar({ ...snackbar, open: false });
+  };
+
+  useEffect(() => {
+    if (data && data.getAllUsers) {
+      setUserData(data.getAllUsers);
+    }
+  }, [data]);
+
+  const handleUpdate = async (newRow) => {
+    try {
+      await updateUserDetails({
+        variables: {
+          updatedDetails: {
+            name: newRow.name,
+            email: newRow.email,
+            phone: newRow.phone,
+            dob: newRow.dob,
+            address: newRow.address,
+            city: newRow.city,
+            pincode: newRow.pincode,
+            department: newRow.department,
+          },
+        },
+      });
+      setUserData((prevRows) =>
+        prevRows.map((row) => (row.id === newRow.id ? newRow : row))
+      );
+      setSnackbar({
+        open: true,
+        message: "Update successful!",
+        severity: "success",
+      });
+    } catch (error) {
+      console.error("Failed to update:", error);
+      setSnackbar({ open: true, message: "Update failed!", severity: "error" });
+      return newRow;
+    }
+  };
+
   const columns = [
     {
       field: "id",
@@ -36,8 +87,7 @@ const Contacts = () => {
       headerAlign: "center",
       align: "center",
       editable: true,
-    }
-    ,
+    },
     {
       field: "email",
       headerName: "Email",
@@ -53,7 +103,6 @@ const Contacts = () => {
       headerAlign: "center",
       align: "center",
       editable: true,
-
     },
     {
       field: "dob",
@@ -94,16 +143,15 @@ const Contacts = () => {
     },
   ];
 
-  useEffect(() => {
-    if (ALL_USERS.data && ALL_USERS.data?.getAllUsers) {
-      // console.log(ALL_USERS.data?.getAllUsers)
-      setUserData(ALL_USERS.data?.getAllUsers)
-    }
+  // useEffect(() => {
+  //   if (ALL_USERS.data && ALL_USERS.data?.getAllUsers) {
+  //     // console.log(ALL_USERS.data?.getAllUsers)
+  //     setUserData(ALL_USERS.data?.getAllUsers);
+  //   }
+  // }, [ALL_USERS.data]);
 
-  }, [ALL_USERS.data])
-
-  if (ALL_USERS.loading) return <p>Loading...</p>;
-  if (ALL_USERS.error) return <p>Error: {ALL_USERS.error.message}</p>;
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
 
   return (
     <Box m="20px">
@@ -150,10 +198,20 @@ const Contacts = () => {
           // processRowUpdate={handleChange}
           // onProcessRowUpdateError={(error) => {
           //   // throw new Error(`Updating failure: ${error}`)
-          //   console.log(error)  
+          //   console.log(error)
           // }}
+          processRowUpdate={handleUpdate}
           experimentalFeatures={{ newEditingApi: true }}
         />
+        <Snackbar
+          open={snackbar.open}
+          autoHideDuration={3000}
+          onClose={handleCloseSnackbar}
+        >
+          <Alert onClose={handleCloseSnackbar} severity={snackbar.severity}>
+            {snackbar.message}
+          </Alert>
+        </Snackbar>
       </Box>
     </Box>
   );
