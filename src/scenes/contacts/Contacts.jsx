@@ -19,26 +19,18 @@ const Contacts = () => {
     message: "",
     severity: "",
   });
-  // const [formData, setFormData] = useState();
-
-  //const ALL_USERS = useQuery(GET_ALL_USERS);
-
-  // const handleChange = () => {
-  //   console.log("Hello");
-  // };
-
-  // const [rows, setRows] = useState(userData);
-  const { data, loading, error } = useQuery(GET_ALL_USERS);
+  
+  const ALL_USERS = useQuery(GET_ALL_USERS);
   const [updateUserDetails] = useMutation(UPDATE_USER_DETAILS);
   const handleCloseSnackbar = () => {
     setSnackbar({ ...snackbar, open: false });
   };
 
   useEffect(() => {
-    if (data && data.getAllUsers) {
-      setUserData(data.getAllUsers);
+    if (ALL_USERS.data && ALL_USERS.data.getAllUsers) {
+      setUserData(ALL_USERS.data.getAllUsers);
     }
-  }, [data]);
+  }, [ALL_USERS.data]);
 
   const handleUpdate = async (newRow) => {
     try {
@@ -143,15 +135,8 @@ const Contacts = () => {
     },
   ];
 
-  // useEffect(() => {
-  //   if (ALL_USERS.data && ALL_USERS.data?.getAllUsers) {
-  //     // console.log(ALL_USERS.data?.getAllUsers)
-  //     setUserData(ALL_USERS.data?.getAllUsers);
-  //   }
-  // }, [ALL_USERS.data]);
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+  if (ALL_USERS.loading) return <p>Loading...</p>;
+  if (ALL_USERS.error) return <p>Error: {ALL_USERS.error.message}</p>;
 
   return (
     <Box m="20px">
@@ -195,11 +180,6 @@ const Contacts = () => {
           rows={userData || []}
           columns={columns}
           slots={{ toolbar: GridToolbar }}
-          // processRowUpdate={handleChange}
-          // onProcessRowUpdateError={(error) => {
-          //   // throw new Error(`Updating failure: ${error}`)
-          //   console.log(error)
-          // }}
           processRowUpdate={handleUpdate}
           experimentalFeatures={{ newEditingApi: true }}
         />
