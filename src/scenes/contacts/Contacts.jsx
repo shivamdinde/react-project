@@ -1,5 +1,10 @@
 import { Box, Snackbar, Alert } from "@mui/material";
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  GridToolbar,
+  GridCellModes,
+  useGridApiRef,
+} from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import Header from "../../components/Header";
 import { useTheme } from "@mui/material";
@@ -19,7 +24,7 @@ const Contacts = () => {
     message: "",
     severity: "",
   });
-  
+
   const ALL_USERS = useQuery(GET_ALL_USERS);
   const [updateUserDetails] = useMutation(UPDATE_USER_DETAILS);
   const handleCloseSnackbar = () => {
@@ -56,10 +61,23 @@ const Contacts = () => {
         message: "Update successful!",
         severity: "success",
       });
+      return newRow;
     } catch (error) {
       console.error("Failed to update:", error);
       setSnackbar({ open: true, message: "Update failed!", severity: "error" });
-      return newRow;
+      throw error;
+    }
+  };
+  const apiRef = useGridApiRef();
+  const handleProcessRowUpdate = (newRow) => {
+    return handleUpdate(newRow);
+  };
+  const handleCellModesModelChange = (params) => {
+    const id = params.id;
+    const mode = params.mode;
+    if (mode === GridCellModes.View) {
+      const rowNode = apiRef.current.getRowNode(id);
+      rowNode.setMode(GridCellModes.View);
     }
   };
 
@@ -180,8 +198,14 @@ const Contacts = () => {
           rows={userData || []}
           columns={columns}
           slots={{ toolbar: GridToolbar }}
-          processRowUpdate={handleUpdate}
+          processRowUpdate={handleProcessRowUpdate}
           experimentalFeatures={{ newEditingApi: true }}
+          onCellEditStop={(params, event) => {
+            if (params.reason === GridCellModes.View) {
+              event.defaultMuiPrevented = true;
+            }
+          }}
+          onCellModesModelChange={handleCellModesModelChange}
         />
         <Snackbar
           open={snackbar.open}
