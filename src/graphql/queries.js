@@ -54,3 +54,13 @@ export const GET_ALL_USERS = gql`
 //     }
 //   }
 // `;
+
+
+export const GET_ALL_AVAILABLE_PAGE_REQUIREMENT = gql`
+  query GetAvailablePermissions {
+  getAvailablePermissions {
+    key
+    permission
+  }
+}
+`

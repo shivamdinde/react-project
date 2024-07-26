@@ -1,5 +1,10 @@
 import { Box, Snackbar, Alert } from "@mui/material";
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import { 
+  DataGrid, 
+  GridToolbar,
+  GridCellModes,
+  useGridApiRef,
+ } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import Header from "../../components/Header";
 import { useTheme } from "@mui/material";
@@ -31,6 +36,37 @@ const Contacts = () => {
       setUserData(ALL_USERS.data.getAllUsers);
     }
   }, [ALL_USERS.data]);
+  
+  // const handleUpdate = async (newRow) => {
+  //   try {
+  //     await updateUserDetails({
+  //       variables: {
+  //         updatedDetails: {
+  //           name: newRow.name,
+  //           email: newRow.email,
+  //           phone: newRow.phone,
+  //           dob: newRow.dob,
+  //           address: newRow.address,
+  //           city: newRow.city,
+  //           pincode: newRow.pincode,
+  //           department: newRow.department,
+  //         },
+  //       },
+  //     });
+  //     setUserData((prevRows) =>
+  //       prevRows.map((row) => (row.id === newRow.id ? newRow : row))
+  //     );
+  //     setSnackbar({
+  //       open: true,
+  //       message: "Update successful!",
+  //       severity: "success",
+  //     });
+  //   } catch (error) {
+  //     console.error("Failed to update:", error);
+  //     setSnackbar({ open: true, message: "Update failed!", severity: "error" });
+  //     return newRow;
+  //   }
+  // };
 
   const handleUpdate = async (newRow) => {
     try {
@@ -56,10 +92,23 @@ const Contacts = () => {
         message: "Update successful!",
         severity: "success",
       });
+      return newRow;
     } catch (error) {
       console.error("Failed to update:", error);
       setSnackbar({ open: true, message: "Update failed!", severity: "error" });
-      return newRow;
+      throw error;
+    }
+  };
+  const apiRef = useGridApiRef();
+  const handleProcessRowUpdate = (newRow) => {
+    return handleUpdate(newRow);
+  };
+  const handleCellModesModelChange = (params) => {
+    const id = params.id;
+    const mode = params.mode;
+    if (mode === GridCellModes.View) {
+      const rowNode = apiRef.current.getRowNode(id);
+      rowNode.setMode(GridCellModes.View);
     }
   };
 
@@ -180,8 +229,14 @@ const Contacts = () => {
           rows={userData || []}
           columns={columns}
           slots={{ toolbar: GridToolbar }}
-          processRowUpdate={handleUpdate}
+          processRowUpdate={handleProcessRowUpdate}
           experimentalFeatures={{ newEditingApi: true }}
+          onCellEditStop={(params, event) => {
+            if (params.reason === GridCellModes.View) {
+              event.defaultMuiPrevented = true;
+            }
+          }}
+          onCellModesModelChange={handleCellModesModelChange} 
         />
         <Snackbar
           open={snackbar.open}

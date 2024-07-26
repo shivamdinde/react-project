@@ -19,7 +19,9 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
+
 function App() {
+
   const [theme, colorMode] = useMode();
   return (
     <ApolloProvider client={client}>
@@ -35,15 +37,42 @@ function App() {
               <Topbar />
 
               <Routes>
-                <Route path="/" element={<Dashboard />} />
-                <Route path="/team" element={<Team />} />
-                <Route path="/contacts" element={<Contacts />} />
-                <Route path="/invoices" element={<Invoices />} />
-                <Route path="/form" element={<Form />} />
-                <Route path="/faq" element={<FAQ />} />
-                <Route path="/bar" element={<Bar />} />
-                <Route path="/pie" element={<Pie />} />
-                <Route path="/line" element={<Line />} />
+                <Route
+                  path="/"
+                  element={<Dashboard />}
+                />
+                <Route
+                  path="/team"
+                  element={<Team />}
+                />
+                <Route
+                  path="/contacts"
+                  element={<Contacts />}
+                />
+                <Route
+                  path="/invoices"
+                  element={<Invoices />}
+                />
+                <Route
+                  path="/form"
+                  element={<Form />}
+                />
+                <Route
+                  path="/faq"
+                  element={<FAQ />}
+                />
+                <Route
+                  path="/bar"
+                  element={<Bar />}
+                />
+                <Route
+                  path="/pie"
+                  element={<Pie />}
+                />
+                <Route
+                  path="/line"
+                  element={<Line />}
+                />
               </Routes>
             </main>
           </div>

@@ -17,16 +17,35 @@ import {
   MenuOutlined,
 } from "@mui/icons-material";
 
+// import { useQuery } from "@apollo/client";
+// import { GET_ALL_AVAILABLE_PAGE_REQUIREMENT } from "../../graphql/queries";
+
 const Item = ({ title, to, icon, selected, setSelected }) => {
+  
+  // const PAGE_REQUIREMENT = useQuery(GET_ALL_AVAILABLE_PAGE_REQUIREMENT);
+
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
+
+
+  // if (PAGE_REQUIREMENT.loading) return <p>Loading...</p>;
+  // if (PAGE_REQUIREMENT.error) return <p>Error: {PAGE_REQUIREMENT.error.message}</p>;
+  // if(PAGE_REQUIREMENT.data){
+  //   console.log(PAGE_REQUIREMENT.data.getAvailablePermissions)
+  // }
+
   return (
     <MenuItem
       active={selected === title}
       style={{
         color: colors.grey[100],
       }}
-      onClick={() => setSelected(title)}
+      onClick={() => {
+        setSelected(title);
+        localStorage.setItem('activeMenu', title)
+      }
+      }
       icon={icon}
     >
       <Typography>{title}</Typography>
@@ -39,7 +58,7 @@ const Sidebar = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [isCollapsed, setIsCollapsed] = useState(true);
-  const [selected, setSelected] = useState("Dashboard");
+  const [selected, setSelected] = useState(localStorage.getItem('activeMenu'));
 
   return (
     <Box

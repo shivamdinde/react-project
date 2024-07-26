@@ -44,7 +44,8 @@ const BarChart = ({ isDashboard = false }) => {
       padding={0.3}
       valueScale={{ type: "linear" }}
       indexScale={{ type: "band", round: true }}
-      colors={{ scheme: "nivo" }}
+      // colors={{ scheme: "nivo" }}
+      colors={['#8BC1F7', '#519DE9', '#06C', '#004B95', '#002F5D', '#0f2b63' ]}
       defs={[
         {
           id: "dots",
